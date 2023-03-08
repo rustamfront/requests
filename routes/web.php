@@ -5,6 +5,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\TableController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -29,3 +30,5 @@ Route::get('logout', function () {
 })->name('logout');
 Route::get('form', [FormController::class, 'show'])->name('form');
 Route::post('form', [FormController::class, 'send'])->name('form.post');
+Route::get('table', [TableController::class, 'show'])->name('table');
+Route::get('api/table', [TableController::class, 'data'])->name('table.api');

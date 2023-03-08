@@ -19,13 +19,13 @@ class FormController extends Controller
 
     public function send(Request $request)
     {
-//        $hour = $this->lastSend();
-//        if ($hour < 24) {
-//            return response()->json([
-//                'status' => 'error',
-//                'message' => 'Заявку можно оставлять не чаще раза в сутки!'
-//            ]);
-//        }
+        $hour = $this->lastSend();
+        if ($hour < 24) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Заявку можно оставлять не чаще раза в сутки!'
+            ]);
+        }
 
         $except = ['bat', 'jar', 'exe'];
         if (in_array($request->input('ext'), $except)) {
