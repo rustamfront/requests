@@ -13,6 +13,7 @@ class FormController extends Controller
 {
     public function show()
     {
+        $this->authorize('show-form');
         return view('form');
     }
 

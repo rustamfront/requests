@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\MainController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -17,9 +18,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [MainController::class, 'index']);
 Route::get('register', [RegisterController::class, 'show'])->name('register');
 Route::post('register', [RegisterController::class, 'register'])->name('register.post');
 Route::get('login', [LoginController::class, 'show'])->name('login');

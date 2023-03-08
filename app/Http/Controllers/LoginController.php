@@ -11,7 +11,7 @@ class LoginController extends Controller
     public function show()
     {
         if (Auth::check()) {
-            return redirect()->intended(route('form'));
+            return redirect()->intended(route('/'));
         }
         return view('login');
     }
@@ -21,7 +21,7 @@ class LoginController extends Controller
         $fields = $request->only(['email', 'password']);
 
         if (Auth::attempt($fields)) {
-            return redirect()->intended(route('form'));
+            return redirect('/');
         }
 
         return redirect(route('login'))->withError([
