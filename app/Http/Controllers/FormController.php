@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\RequestForm;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class FormController extends Controller
 {
@@ -16,6 +17,14 @@ class FormController extends Controller
 
     public function send(Request $request)
     {
+        $hour = $this->lastSend();
+        if ($hour < 24) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Заявку можно оставлять не чаще раза в сутки!'
+            ]);
+        }
+
         $except = ['bat', 'jar', 'exe'];
         if (in_array($request->input('ext'), $except)) {
             return response()->json([
@@ -45,5 +54,17 @@ class FormController extends Controller
             'status' => 'ok',
             'message' => 'Заявка оставлена!'
         ]);
+    }
+
+    public function lastSend()
+    {
+        $time = RequestForm::where('user_id', Auth::id())->orderBy('created_at', 'desc')->first();
+        if ($time) {
+            $currentTime = Carbon::now();
+            $difTime = $currentTime->timestamp - $time->created_at->timestamp;
+            $hour = Carbon::createFromTimestamp($difTime)->hour;
+            return $hour;
+        }
+        return 25;
     }
 }
