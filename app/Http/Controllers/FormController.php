@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\RequestForm;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Jobs\SendEmailJob;
 
 class FormController extends Controller
 {
@@ -17,13 +18,13 @@ class FormController extends Controller
 
     public function send(Request $request)
     {
-        $hour = $this->lastSend();
-        if ($hour < 24) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Заявку можно оставлять не чаще раза в сутки!'
-            ]);
-        }
+//        $hour = $this->lastSend();
+//        if ($hour < 24) {
+//            return response()->json([
+//                'status' => 'error',
+//                'message' => 'Заявку можно оставлять не чаще раза в сутки!'
+//            ]);
+//        }
 
         $except = ['bat', 'jar', 'exe'];
         if (in_array($request->input('ext'), $except)) {
@@ -39,6 +40,7 @@ class FormController extends Controller
             'file'    => 'required|max:3072'
         ]);
 
+        $email = 'rustam@rustam.ru';
         $file = $request->file('file')->store('upload');
         $user = Auth::id();
         $data = [
@@ -49,6 +51,8 @@ class FormController extends Controller
         ];
 
         RequestForm::create($data);
+
+        SendEmailJob::dispatch($email, $data);
 
         return response()->json([
             'status' => 'ok',
