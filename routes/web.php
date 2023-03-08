@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\FormController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -27,3 +28,5 @@ Route::get('logout', function () {
     Auth::logout();
     return redirect('login');
 })->name('logout');
+Route::get('form', [FormController::class, 'show'])->name('form');
+Route::post('form', [FormController::class, 'send'])->name('form.post');
